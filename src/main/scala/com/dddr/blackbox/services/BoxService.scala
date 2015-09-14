@@ -20,7 +20,6 @@ trait BoxService extends CouchbaseSupport {
     lookupByKey[BoxEntity](boxId.key)
   }
   def createBox(newBox: BoxEntityNew): Future[Option[BoxEntity]] = {
-
     val boxPromise = Promise[Option[BoxEntity]]()
     val box = {
       BoxEntity(title = newBox.title,
