@@ -41,23 +41,5 @@ trait HttpService extends BaseServiceRoute with IndexService with BoxService wit
           }
         }
       }
-      /*
-       post {
-            entity(as[NewMissionEntity]) { mission =>
-              onSuccess(createMission(mission, loggedInUser)) {
-                case Some(newMission) => complete(Created, filterMissionFields(newMission))
-                case None => complete(FailedDependency,  s"Could not locate vehicle with id: ${mission.vehicleId}")
-              }
-            }
-          } ~
-      post {
-            entity(as[NewMissionEntity]) { mission =>
-              onSuccess(createMission(mission, loggedInUser)) {
-                case Some(newMission) => complete(Created, filterMissionFields(newMission))
-                case None => complete(FailedDependency,  s"Could not locate vehicle with id: ${mission.vehicleId}")
-              }
-            }
-          }
-       */
     }
 }

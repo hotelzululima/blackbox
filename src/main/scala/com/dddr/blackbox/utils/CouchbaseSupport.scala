@@ -22,7 +22,7 @@ import scala.concurrent.{Future, Promise}
 import scala.util.{Failure, Success}
 
 /**
- * Created by rroche and some other guy (not important) on 9/8/15.
+ * Created by Jason Martens on 9/8/15.
  */
 // Keep the env in an object so it is only created once
 object CouchbaseSupport {

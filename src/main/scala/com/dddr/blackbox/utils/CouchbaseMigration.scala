@@ -10,7 +10,7 @@ import rx.lang.scala.JavaConversions.toScalaObservable
 import scala.collection.JavaConversions._
 
 /**
- * Created by rroche and this other guy again on 8/6/15.
+ * Created by Jason Martens on 8/6/15.
  *
  * Couchbase schema migrations
  */

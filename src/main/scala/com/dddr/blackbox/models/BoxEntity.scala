@@ -5,12 +5,9 @@ package com.dddr.blackbox.models
  */
 
 case class SoftwareVersion(name: String, version: String)
-/*
-case class NewMissionEntity(name: String, vehicleId: VehicleId, actions: Option[List[ActionEntity]] = None,
-                             tags: Option[List[String]] = None)
- */
+
 case class BoxEntityNew(title: String, description: String, category: Option[List[String]] = None,
-                        firmware: Option[List[SoftwareVersion]] = None)
+                        firmware: Option[List[SoftwareVersion]] = None, userId: UserId)
 
 case class BoxEntity(id: BoxId = BoxId(), title: String, description: String, category: List[String],
                      firmware: List[SoftwareVersion], docType: Option[String] = Some("box"), userId: UserId)

@@ -8,11 +8,11 @@ import com.typesafe.config.ConfigFactory
 trait Config {
   private val config = ConfigFactory.load()
 
-  private val assetsConfig = config.getConfig("assets")
+  val assetsConfig = config.getConfig("assets")
   val assetPath = assetsConfig.getString("path")
   val viewsPath = assetsConfig.getString("views")
 
-  private val siteConfig = config.getConfig("site")
+  val siteConfig = config.getConfig("site")
   val viewTitle = siteConfig.getString("title")
 
   val couchbaseConfig = config.getConfig("couchbase")

@@ -22,5 +22,4 @@ object Main extends App with CouchbaseMigration with HttpService {
   migrate()
 
   Http().bindAndHandle(routes, "0.0.0.0", 8444)
-
 }

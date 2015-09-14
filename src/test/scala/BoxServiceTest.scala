@@ -14,18 +14,6 @@ class BoxServiceTest extends BaseServiceTest {
     }
   }
   it should "save a mission on Post and be able to retrieve it later" in {
-    /*
-    val newMission = s"""{"name": "Flying High", "vehicleId": "${testVehicles(0).id}"} """
-      val entity = HttpEntity(ContentTypes.`application/json`, newMission)
-      var missionId = MissionId()
-      Post("/missions", entity) ~> addHeader("Token", testTokens.head.token) ~> missionsRoute ~> check {
-        val returnedMission = responseAs[MissionEntity]
-        response.status shouldBe Created
-        returnedMission.name shouldBe "Flying High"
-        returnedMission.vehicleId shouldBe testVehicles(0).id
-        missionId = returnedMission.id
-      }
-     */
     val newBox = s"""{"title": "Sample", "description": "Sample", "firmware": [], "category": [], "userId": 1 } """
     val entity = HttpEntity(ContentTypes.`application/json`, newBox)
     var newBoxId = BoxId()
