@@ -17,5 +17,6 @@ trait Protocol extends DefaultJsonProtocol {
   }
   implicit val softwareVersionFormat = jsonFormat2(SoftwareVersion)
   implicit val boxFormat = jsonFormat7(BoxEntity)
+  implicit val boxFormatNew = jsonFormat4(BoxEntityNew)
   implicit val userFormat = jsonFormat4(UserEntity)
 }

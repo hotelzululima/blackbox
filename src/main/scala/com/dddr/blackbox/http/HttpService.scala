@@ -1,5 +1,6 @@
 package com.dddr.blackbox.http
 
+import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import com.dddr.blackbox.http.routes.BaseServiceRoute
 import com.dddr.blackbox.models._
@@ -28,19 +29,27 @@ trait HttpService extends BaseServiceRoute with IndexService with BoxService wit
       complete(getListOfBoxes())
     } ~
     pathPrefix("box"){
-      get{
+      get {
         path(JavaUUID) { uuid =>
           complete(getBoxById(BoxId(uuid.toString())))
         }
       }
-      post{
+      post {
         entity(as[BoxEntityNew]) { box =>
-          onSuccess(createBox(box, loggedInUser)) {
+          onSuccess(createBox(box)) {
             case Some(newBox) => complete(Created, newBox)
           }
         }
       }
       /*
+       post {
+            entity(as[NewMissionEntity]) { mission =>
+              onSuccess(createMission(mission, loggedInUser)) {
+                case Some(newMission) => complete(Created, filterMissionFields(newMission))
+                case None => complete(FailedDependency,  s"Could not locate vehicle with id: ${mission.vehicleId}")
+              }
+            }
+          } ~
       post {
             entity(as[NewMissionEntity]) { mission =>
               onSuccess(createMission(mission, loggedInUser)) {
