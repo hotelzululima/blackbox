@@ -23,17 +23,18 @@ trait HttpService extends BaseServiceRoute with IndexService with BoxService wit
 
   val routes =
     extendedSupportHandler {
-      path(""){
-        complete(generateView(viewTitle, fakeObject, realLayoutFile, fakeTemplate))
-      } ~
-        pathPrefix("box"){
-          get {
-            path(JavaUUID) { uuid =>
+//      path(""){
+//        complete(generateView(viewTitle, fakeObject, realLayoutFile, fakeTemplate))
+//      } ~
+        path("box") {
+          path(JavaUUID) { uuid =>
+            get {
               complete(getBoxById(BoxId(uuid.toString())))
             }
           }
           post {
             entity(as[BoxEntityNew]) { box =>
+              complete("boxx")
               onSuccess(createBox(box)) {
                 case Some(newBox) => complete(Created, newBox)
                 case None => complete(FailedDependency,  s"Could not create box")
@@ -42,9 +43,4 @@ trait HttpService extends BaseServiceRoute with IndexService with BoxService wit
           }
         }
     }
-  /*
-      path("box") {
-        complete(getListOfBoxes())
-      }
-      */
 }
