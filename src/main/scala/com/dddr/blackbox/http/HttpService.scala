@@ -10,6 +10,8 @@ import com.dddr.blackbox.utils.ExtendedSupport
 trait HttpService extends BoxServiceRoute with ViewServiceRoute with ExtendedSupport {
   val routes = extendedSupportHandler {
         viewRoutes ~
-        boxRoutes
+          pathPrefix("api" / "v1") {
+            boxRoutes
+          }
     }
 }

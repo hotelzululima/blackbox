@@ -6,8 +6,9 @@ import akka.http.scaladsl.model.StatusCodes._
  * Created by rroche on 9/8/15.
  */
 class BoxServiceTest extends BaseServiceTest {
+  val apiNamespace = "/api/v1"
   it should "get a list of boxes" in {
-    Get("/box") ~> routes ~> check {
+    Get(s"$apiNamespace/box") ~> routes ~> check {
       response.status shouldBe OK
       val data = responseAs[List[BoxEntity]]
       data.length should be > 0
@@ -19,7 +20,7 @@ class BoxServiceTest extends BaseServiceTest {
     val newBox = s"""{"title": "Sample", "description": "Sample", "firmware": [], "category": [], "userId": "1" } """
     val entity = HttpEntity(ContentTypes.`application/json`, newBox)
 
-    Post("/box", entity) ~> routes ~> check {
+    Post(s"$apiNamespace/box", entity) ~> routes ~> check {
       val returnedBox = responseAs[BoxEntity]
       response.status shouldBe Created
       returnedBox.title shouldBe "Sample"
@@ -28,7 +29,7 @@ class BoxServiceTest extends BaseServiceTest {
     }
   }
   it should "be able to get a mission by id" in {
-    Get(s"/box/${newBoxId.id}") ~> routes ~> check {
+    Get(s"$apiNamespace/box/${newBoxId.id}") ~> routes ~> check {
       val returnedBox = responseAs[BoxEntity]
       response.status shouldBe OK
       returnedBox.title shouldBe "Sample"
