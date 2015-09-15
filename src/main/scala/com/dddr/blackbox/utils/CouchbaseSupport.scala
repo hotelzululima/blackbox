@@ -226,7 +226,7 @@ trait CouchbaseSupport extends BaseServiceRoute with Protocol with Config {
    * @param stale Allow potentially stale indexes or not
    * @return Observable of AsyncViewRow
    */
-  def indexQuery(designDoc: String, viewDoc: String, keys: List[String], stale: Stale = Stale.FALSE): Observable[AsyncViewRow] = {
+  def indexQuery(designDoc: String, viewDoc: String, keys: List[String] = List(), stale: Stale = Stale.FALSE): Observable[AsyncViewRow] = {
     // Couchbase needs a java.util.List
     val keyList: java.util.List[String] = keys
     val query =
