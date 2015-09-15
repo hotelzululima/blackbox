@@ -14,17 +14,17 @@ import scala.io.Source
  * Created by rroche on 9/8/15.
  */
 trait HttpService extends BaseServiceRoute with IndexService with BoxService with ExtendedSupport with Config {
-  val fakeObject = UserEntity(login = "jason", password = "123", name = "JASON IS A HAXXOR")
-  val fakeTemplate =
-    """
-      |<p>{{title}}</p><p>{{user.name}}</p>
-    """.stripMargin
-
   val realLayoutFile = Source.fromFile(s"$viewsPath/layout.hbs").mkString
 
   val routes =
     extendedSupportHandler {
       path(""){
+        // TODO: move this to its own ServiceRouter, probably ViewsServiceRouter
+        val fakeObject = UserEntity(login = "jason", password = "123", name = "JASON IS A HAXXOR")
+        val fakeTemplate =
+          """
+            |<p>{{title}}</p><p>{{user.name}}</p>
+          """.stripMargin
         complete(generateView(viewTitle, fakeObject, realLayoutFile, fakeTemplate))
       } ~
         pathPrefix("box") {
