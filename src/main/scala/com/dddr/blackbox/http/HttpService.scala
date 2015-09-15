@@ -2,6 +2,7 @@ package com.dddr.blackbox.http
 
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
 import com.dddr.blackbox.http.routes.BaseServiceRoute
 import com.dddr.blackbox.models._
 import com.dddr.blackbox.services.{BoxService, IndexService}
@@ -23,23 +24,25 @@ trait HttpService extends BaseServiceRoute with IndexService with BoxService wit
 
   val routes =
     extendedSupportHandler {
-//      path(""){
-//        complete(generateView(viewTitle, fakeObject, realLayoutFile, fakeTemplate))
-//      } ~
-        path("box") {
+      path(""){
+        complete(generateView(viewTitle, fakeObject, realLayoutFile, fakeTemplate))
+      } ~
+        pathPrefix("box") {
           path(JavaUUID) { uuid =>
             get {
               complete(getBoxById(BoxId(uuid.toString())))
             }
-          }
+          } ~
           post {
             entity(as[BoxEntityNew]) { box =>
-              complete("boxx")
               onSuccess(createBox(box)) {
                 case Some(newBox) => complete(Created, newBox)
                 case None => complete(FailedDependency,  s"Could not create box")
               }
             }
+          } ~
+          get {
+            complete(getListOfBoxes())
           }
         }
     }

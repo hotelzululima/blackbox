@@ -13,10 +13,12 @@ class BoxServiceTest extends BaseServiceTest {
       data.length should be > 0
     }
   }
-  it should "save a mission on Post and be able to retrieve it later" in {
-    val newBox = s"""{"title": "Sample", "description": "Sample", "firmware": [], "category": [], "userId": 1 } """
+
+  var newBoxId = BoxId()
+  it should "save a mission on Post" in {
+    val newBox = s"""{"title": "Sample", "description": "Sample", "firmware": [], "category": [], "userId": "1" } """
     val entity = HttpEntity(ContentTypes.`application/json`, newBox)
-    var newBoxId = BoxId()
+
     Post("/box", entity) ~> routes ~> check {
       val returnedBox = responseAs[BoxEntity]
       response.status shouldBe Created
@@ -24,32 +26,13 @@ class BoxServiceTest extends BaseServiceTest {
       returnedBox.description shouldBe "Sample"
       newBoxId = returnedBox.id
     }
-
+  }
+  it should "be able to get a mission by id" in {
     Get(s"/box/${newBoxId.id}") ~> routes ~> check {
       val returnedBox = responseAs[BoxEntity]
       response.status shouldBe OK
-      returnedBox.title shouldBe "lame box"
-      returnedBox.description shouldBe "lame description"
+      returnedBox.title shouldBe "Sample"
+      returnedBox.description shouldBe "Sample"
     }
   }
-  /*
-  Get(s"/missions/${missionId.id}") ~> addHeader("Token", testTokens.head.token) ~> missionsRoute ~> check {
-        val returnedMission = responseAs[MissionEntity]
-        response.status shouldBe OK
-        returnedMission.name shouldBe "Flying High"
-        returnedMission.id shouldBe missionId
-        returnedMission.vehicleId shouldBe testVehicles(0).id
-      }
-   */
-//  it should "save a box entity" in {
-//    val sample_box = {
-//      BoxEntity(title = "Sample", description = "Sample", category = List(), firmware = List(), userId = UserId())
-//    }
-//    Post("/box", sample_box) ~> routes ~> check {
-//      response.status shouldBe OK
-//      val data = responseAs[BoxEntity]
-//      data.title shouldBe "Sample"
-//      data.description shouldBe "Sample"
-//    }
-//  }
 }

@@ -12,7 +12,7 @@ import scala.concurrent.{Promise, Future}
 trait BoxService extends CouchbaseSupport {
   def getListOfBoxes(): List[BoxEntity] = {
     val boxes = 1 to 5 map { num =>
-      BoxEntity(title = "lame box", description = "lame description", category = List(), firmware = List(), userId = UserId("f5f6540e-cd67-4a2a-afdc-5141fa729a04"))
+      BoxEntity(title = "lame box item", description = "lame description item", category = List(), firmware = List(), userId = UserId())
     }
     boxes.toList
   }
