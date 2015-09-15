@@ -1,8 +1,8 @@
 package com.dddr.blackbox.services
 
+import akka.stream.scaladsl.{Source, Sink}
 import com.dddr.blackbox.models._
 import com.dddr.blackbox.utils.CouchbaseSupport
-import scala.util.{Failure, Success}
 
 import scala.concurrent.{Promise, Future}
 
@@ -10,11 +10,8 @@ import scala.concurrent.{Promise, Future}
  * Created by rroche on 9/8/15.
  */
 trait BoxService extends CouchbaseSupport {
-  def getListOfBoxes(): List[BoxEntity] = {
-    val boxes = 1 to 5 map { num =>
-      BoxEntity(title = "lame box item", description = "lame description item", category = List(), firmware = List(), userId = UserId())
-    }
-    boxes.toList
+  def getListOfBoxes(): Future[Seq[BoxEntity]] = {
+    indexQueryToEntity[BoxEntity]("boxes", "boxes", List()).grouped(1000).runWith(Sink.head)
   }
   def getBoxById(boxId: BoxId): Future[Option[BoxEntity]] = {
     lookupByKey[BoxEntity](boxId.key)
