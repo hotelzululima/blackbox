@@ -24,12 +24,13 @@ import scala.util.{Failure, Success}
 /**
  * Created by Jason Martens on 9/8/15.
  */
+
 // Keep the env in an object so it is only created once
 object CouchbaseSupport {
   val env = DefaultCouchbaseEnvironment.builder().build()
 }
 
-trait CouchbaseSupport extends Config with Protocol with BaseServiceRoute {
+trait CouchbaseSupport extends BaseServiceRoute with Protocol with Config {
 
   // Reuse the env here
   val cluster = CouchbaseCluster.create(CouchbaseSupport.env, couchbaseConfig.getString("hostname"))
@@ -228,7 +229,9 @@ trait CouchbaseSupport extends Config with Protocol with BaseServiceRoute {
   def indexQuery(designDoc: String, viewDoc: String, keys: List[String], stale: Stale = Stale.FALSE): Observable[AsyncViewRow] = {
     // Couchbase needs a java.util.List
     val keyList: java.util.List[String] = keys
-    val query = ViewQuery.from(designDoc, viewDoc).stale(stale).inclusiveEnd(true).keys(JsonArray.from(keyList))
+    val query =
+      if (keys.isEmpty) ViewQuery.from(designDoc, viewDoc).stale(stale).inclusiveEnd(true)
+      else ViewQuery.from(designDoc, viewDoc).stale(stale).inclusiveEnd(true).keys(JsonArray.from(keyList))
     toScalaObservable(bucket.async().query(query))
       .flatMap(queryResult => queryResult.rows())
   }
