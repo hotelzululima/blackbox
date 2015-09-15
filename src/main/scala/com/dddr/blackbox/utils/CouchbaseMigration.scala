@@ -78,7 +78,7 @@ trait CouchbaseMigration extends CouchbaseSupport {
         | }
         |}
       """.stripMargin
-    val boxView = DefaultView.create("boxes", usersMap)
+    val boxView = DefaultView.create("boxes", boxMap)
     val boxesDesignDoc = DesignDocument.create("boxes", List(boxView))
     bucket.bucketManager().upsertDesignDocument(boxesDesignDoc, false)
 
