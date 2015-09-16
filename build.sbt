@@ -28,7 +28,7 @@ libraryDependencies ++= {
     "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
     "com.couchbase.client" % "java-client" % "2.1.4",
     "com.gilt" %% "handlebars-scala" % "2.0.1",
-    "io.dronekit" %% "couchbasescala" % "1.0",
+    "io.dronekit" %% "couchbasescala" % "1.0.1",
     "io.reactivex" % "rxjava-reactive-streams" % "1.0.1",
     "io.reactivex" %% "rxscala" % "0.25.0"
   )
