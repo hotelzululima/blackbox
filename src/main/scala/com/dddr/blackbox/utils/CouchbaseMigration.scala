@@ -2,9 +2,11 @@ package com.dddr.blackbox.utils
 
 import java.util.NoSuchElementException
 
+import akka.event.LoggingAdapter
 import com.couchbase.client.java.document.JsonDocument
 import com.couchbase.client.java.document.json.JsonObject
 import com.couchbase.client.java.view.{DefaultView, DesignDocument}
+import io.dronekit.CouchbaseScala
 import rx.lang.scala.JavaConversions.toScalaObservable
 
 import scala.collection.JavaConversions._
@@ -14,7 +16,10 @@ import scala.collection.JavaConversions._
  *
  * Couchbase schema migrations
  */
-trait CouchbaseMigration extends CouchbaseSupport {
+trait CouchbaseMigration {
+  val log: LoggingAdapter
+  val couchbase: CouchbaseScala
+  import couchbase._
 
   /**
    * Migrate from whatever the current version of the database is to the most recent

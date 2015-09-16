@@ -6,6 +6,7 @@ import akka.http.scaladsl.model.StatusCodes._
  * Created by rroche on 9/8/15.
  */
 class BoxServiceTest extends BaseServiceTest {
+  import protocol._
   val apiNamespace = "/api/v1"
   it should "get a list of boxes" in {
     Get(s"$apiNamespace/box") ~> routes ~> check {

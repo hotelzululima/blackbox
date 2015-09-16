@@ -11,6 +11,7 @@ import com.dddr.blackbox.utils.Config
  * Created by rroche on 9/14/15.
  */
 trait BoxServiceRoute extends BoxService with BaseServiceRoute with Config {
+  import protocol._
 
   val boxRoutes =
     pathPrefix("box") {

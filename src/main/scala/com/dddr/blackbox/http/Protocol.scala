@@ -6,7 +6,7 @@ import spray.json.{JsonFormat, JsString, JsValue, DefaultJsonProtocol}
 /**
  * Created by rroche on 9/8/15.
  */
-trait Protocol extends DefaultJsonProtocol {
+class Protocol extends DefaultJsonProtocol {
   implicit object boxIdFormat extends JsonFormat[BoxId] {
     override def write(obj: BoxId): JsValue = JsString(obj.id)
     override def read(json: JsValue): BoxId = BoxId(json.convertTo[String])

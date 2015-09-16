@@ -1,15 +1,17 @@
 package com.dddr.blackbox.services
 
-import akka.stream.scaladsl.{Source, Sink}
+import akka.stream.scaladsl.Sink
 import com.dddr.blackbox.models._
-import com.dddr.blackbox.utils.CouchbaseSupport
 
-import scala.concurrent.{Promise, Future}
+import scala.concurrent.{Future, Promise}
 
 /**
  * Created by rroche on 9/8/15.
  */
-trait BoxService extends CouchbaseSupport {
+trait BoxService extends BaseService {
+  import couchbase._
+  import protocol._
+
   def getListOfBoxes(): Future[Seq[BoxEntity]] = {
     indexQueryToEntity[BoxEntity]("boxes", "boxes", List()).grouped(1000).runWith(Sink.head)
   }
