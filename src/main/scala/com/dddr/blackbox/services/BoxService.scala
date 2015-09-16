@@ -13,7 +13,7 @@ trait BoxService extends BaseService {
   import protocol._
 
   def getListOfBoxes(): Future[Seq[BoxEntity]] = {
-    indexQueryToEntity[BoxEntity]("boxes", "boxes", List()).grouped(1000).runWith(Sink.head)
+    indexQueryToEntity[BoxEntity]("boxes", "boxes").grouped(1000).runWith(Sink.head)
   }
   def getBoxById(boxId: BoxId): Future[Option[BoxEntity]] = {
     lookupByKey[BoxEntity](boxId.key)
