@@ -87,6 +87,19 @@ trait CouchbaseMigration {
     val boxesDesignDoc = DesignDocument.create("boxes", List(boxView))
     bucket.bucketManager().upsertDesignDocument(boxesDesignDoc, false)
 
+    val mediaMap =
+    """
+      |function(doc, meta) {
+      | if (doc.docType && doc.docType === "media") {
+      |   emit(doc.boxId);
+      | }
+      |}
+    """.stripMargin
+
+    val mediaView = DefaultView.create("media", mediaMap)
+    val mediaDesignDoc = DesignDocument.create("media", List(mediaView))
+    bucket.bucketManager().upsertDesignDocument(mediaDesignDoc, false)
+
     // Version document, used by subsequent migrations
     val versionDocument = JsonDocument.create(versionDocumentKey, JsonObject.empty.put("version", 1))
     bucket.insert(versionDocument)

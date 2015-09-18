@@ -19,3 +19,11 @@ case class UserId(id: String = UUID.randomUUID().toString()) extends Identifiers
 case class BoxId(id: String = UUID.randomUUID().toString()) extends Identifiers {
   val kind = "box"
 }
+
+case class MissionId(id: String = UUID.randomUUID().toString()) extends Identifiers {
+  val kind = "mission"
+}
+
+case class MediaId(id: String = UUID.randomUUID().toString()) extends Identifiers {
+  val kind = "media"
+}

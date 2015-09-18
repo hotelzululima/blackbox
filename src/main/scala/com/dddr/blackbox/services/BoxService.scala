@@ -1,6 +1,9 @@
 package com.dddr.blackbox.services
 
+import java.util.UUID
+
 import akka.stream.scaladsl.Sink
+import akka.util.ByteString
 import com.dddr.blackbox.models._
 
 import scala.concurrent.{Future, Promise}
@@ -18,6 +21,16 @@ trait BoxService extends BaseService {
   def getBoxById(boxId: BoxId): Future[Option[BoxEntity]] = {
     lookupByKey[BoxEntity](boxId.key)
   }
+//  def createdMediaNoStream(boxId: BoxId, data: ByteString): MediaEntity = {
+//    lookupByKey[BoxEntity](boxId.key).map {
+//      case Some(box) => {
+////        val uploadedMedia = dronekit.uploadMedia(missionId, data)
+////        val mediaEntity = MediaEntity(boxId = box.id, mediaId = uploadedMedia.id, contentType = uploadedMedia.contentType)
+//        //(id: MediaId = MediaId(), boxId: BoxId, mediaId: UUID = UUID.randomUUID(), contentType: String)
+//        return MediaEntity(boxId = box.id, mediaId = UUID.randomUUID().toString(), contentType = "text")
+//      }
+//    }
+//  }
   def createBox(newBox: BoxEntityNew): Future[Option[BoxEntity]] = {
     val boxPromise = Promise[Option[BoxEntity]]()
     val box = {

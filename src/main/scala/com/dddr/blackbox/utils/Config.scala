@@ -16,5 +16,4 @@ trait Config {
   val viewTitle = siteConfig.getString("title")
 
   val couchbaseConfig = config.getConfig("couchbase")
-
 }
