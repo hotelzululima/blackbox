@@ -1,20 +1,36 @@
 package controllers
 
-import models.{StoryTable, BoxTable}
+import models.{StoryTable, BoxTable, Box, Story}
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import play.api.mvc._
 import slick.driver.JdbcProfile
+import java.util.UUID
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import scala.concurrent.Future
 
 object Application extends Controller with BoxTable with StoryTable with HasDatabaseConfig[JdbcProfile] {
+
   val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
   import driver.api._
 
-//  val Bxes = TableQuery[Boxes]
-//  val Strs = TableQuery[Stories]
+  val boxes = TableQuery[Boxes]
 
-  def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+  //lazy val boxesInsert = boxes returning boxes.map(_.id)
+  //val result = db.run(boxesInsert += Box(title= "test box", dronekitMission= Some(dkMission)))
+
+
+  def index = Action.async { implicit request =>
+
+
+    val dkMission: UUID = UUID.fromString("3e536d2c-2cbb-4475-a07e-ce7776893f03")
+    val insertResult = db.run(boxes += Box(title= "test box", dronekitMission= Some(dkMission)))
+
+    println(insertResult)
+
+    val results: Future[Seq[Box]] = db.run(boxes.result) //get all
+    results.map(boxes => Ok(views.html.index(boxes.toString())))
   }
 
 }
