@@ -14,7 +14,7 @@ trait BoxTable {
   protected val driver: JdbcProfile
   import driver.api._
 
-  class Boxes(tag: Tag) extends Table[Box](tag, "BOX") {
+  class Boxes(tag: Tag) extends Table[Box](tag, "Boxes") {
     def id = column[UUID]("id", O.PrimaryKey)
     def title = column[String]("title")
     def dronekitMission = column[UUID]("dronekitMission")

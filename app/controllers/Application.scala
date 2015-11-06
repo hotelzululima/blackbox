@@ -7,6 +7,7 @@ import play.api.mvc._
 import slick.driver.JdbcProfile
 import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Success, Failure}
 
 import scala.concurrent.Future
 
@@ -25,8 +26,16 @@ object Application extends Controller with BoxTable with StoryTable with HasData
 
 
     val dkMission: UUID = UUID.fromString("3e536d2c-2cbb-4475-a07e-ce7776893f03")
-    val insertResult = db.run(boxes += Box(title= "test box", dronekitMission= Some(dkMission)))
 
+    lazy val boxesInsert = boxes returning boxes.map(_.id)
+    val insertResult = db.run(boxesInsert += Box(title= "test box", dronekitMission= Some(dkMission)))
+
+    insertResult onComplete {
+        case Success(boxId) => println(boxId)
+        case Failure(t) => println("An error has occured: " + t.getMessage)
+    }
+
+    println("HEY!!")
     println(insertResult)
 
     val results: Future[Seq[Box]] = db.run(boxes.result) //get all
