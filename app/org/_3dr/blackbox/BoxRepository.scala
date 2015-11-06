@@ -1,4 +1,4 @@
-package com._3dr.blackbox
+package org._3dr.blackbox
 
 import javax.inject.{ Inject, Singleton }
 import play.api.db.slick.DatabaseConfigProvider
