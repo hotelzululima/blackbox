@@ -21,16 +21,3 @@ case class Story (id: UUID = java.util.UUID.randomUUID(),
                   created: Option[Timestamp],
                   dronekitMedia: Option[UUID])
 
-trait StoryTable {
-  protected val driver: JdbcProfile
-  import driver.api._
-
-  class Stories(tag: Tag) extends Table[Story](tag, "STORY") {
-    def id = column[UUID]("id", O.PrimaryKey)
-    def title = column[String]("title")
-    def created = column[Timestamp]("created")
-    def dronekitMedia = column[UUID]("dronekitMedia")
-
-    def * = (id, title, created.?, dronekitMedia.?) <> (Story.tupled, Story.unapply)
-  }
-}

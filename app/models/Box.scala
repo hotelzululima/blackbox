@@ -1,7 +1,7 @@
 package models
 
 import java.sql.Timestamp
-import java.util.UUID
+import java.util.{Date, UUID}
 import slick.driver.JdbcProfile
 
 /**
@@ -20,18 +20,5 @@ import slick.driver.JdbcProfile
   */
 case class Box(id: UUID = java.util.UUID.randomUUID(),
                title: String,
-               created: Option[Timestamp],
+               created: Option[Timestamp] = Some(new Timestamp(new Date().getTime)),
                dronekitMission: Option[UUID])
-
-trait BoxTable {
-  protected val driver: JdbcProfile
-  import driver.api._
-
-  class Boxes(tag: Tag) extends Table[Box](tag, "Boxes") {
-    def id = column[UUID]("id", O.PrimaryKey)
-    def title = column[String]("title")
-    def dronekitMission = column[UUID]("dronekitMission")
-
-    def * = (title, dronekitMission.?, id) <> (Box.tupled, Box.unapply)
-  }
-}
