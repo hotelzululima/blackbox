@@ -40,8 +40,7 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
     def dronekitMission = column[UUID]("dronekitMission")
 
     //mapping columns to the Box object
-    def * = (id, title, created.?, dronekitMission.?) <> (Box.tupled, Box.unapply)
-
+    def * = (id, title, created, dronekitMission.?) <> ((Box.apply _).tupled, Box.unapply)
   }
 
   //this is our table accessor. We will run our queries on it.
