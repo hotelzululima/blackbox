@@ -1,16 +1,12 @@
 package controllers
 
-import models._
-import org._3dr.blackbox._
-import play.api.Play
-import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
-import play.api.mvc._
-import slick.driver.JdbcProfile
-import java.util.UUID
-import scala.util.{Success, Failure}
-
-import scala.concurrent.{ ExecutionContext, Future }
 import javax.inject._
+
+import org._3dr.blackbox._
+import play.api.mvc._
+
+import scala.concurrent.ExecutionContext
+import scala.util.{Failure, Success}
 
 class Application @Inject() (db: BoxRepository)
                             (implicit ec: ExecutionContext) extends Controller{
