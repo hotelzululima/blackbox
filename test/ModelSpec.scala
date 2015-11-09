@@ -29,7 +29,7 @@ class ModelSpec extends Specification {
 
   // --
 
-  "Computer model" should {
+  "Box model" should {
 
     def bbRepo(implicit app: Application) = {
       val app2BoxRepository = Application.instanceCache[BoxRepository]
@@ -39,7 +39,7 @@ class ModelSpec extends Specification {
     val dronekitMissionId: UUID = UUID.fromString("4e536d2c-2cbb-4475-a07e-ce7776893f03")
     val boxTitle = "A test box from spec"
 
-    "be retrieved by id" in new WithApplication {
+    "be created and retrieved" in new WithApplication {
       val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
       println(insertedBox)
       insertedBox.title must equalTo(boxTitle)
