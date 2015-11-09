@@ -18,3 +18,6 @@ libraryDependencies ++= Seq(
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
+
+//per the Play 2.4 migration guide. We are using dependency injected controllers
+routesGenerator := InjectedRoutesGenerator
