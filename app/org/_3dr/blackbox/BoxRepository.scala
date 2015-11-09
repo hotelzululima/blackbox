@@ -81,7 +81,7 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
   def createBox(title: String, dronekitMission: Option[UUID]): Future[Box] = db.run {
 
     lazy val boxesInsert = boxes returning boxes.map(_.id) into ((box, id) => box.copy())
-    boxesInsert += Box(title= "test box", dronekitMission= dronekitMission)
+    boxesInsert += Box(title= title, dronekitMission= dronekitMission)
 
   }
 
