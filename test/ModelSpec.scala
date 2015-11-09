@@ -43,7 +43,7 @@ class ModelSpec extends Specification {
       val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
       println(insertedBox)
       insertedBox.title must equalTo(boxTitle)
-      //insertedBox.dronekitMission must beSome.which(dronekitMissionId)
+      insertedBox.dronekitMission must be equalTo Some(dronekitMissionId)
     }
 
   }
