@@ -28,7 +28,7 @@ class ModelSpec extends Specification {
 
   // --
 
-  "Box model" should {
+  "Box Repository" should {
 
     def bbRepo(implicit app: Application) = {
       val app2BoxRepository = Application.instanceCache[BoxRepository]
@@ -38,11 +38,30 @@ class ModelSpec extends Specification {
     val dronekitMissionId: UUID = UUID.fromString("4e536d2c-2cbb-4475-a07e-ce7776893f03")
     val boxTitle = "A test box from spec"
 
-    "be retrieved by id" in new WithApplication {
+    "create a new box and retrieve it" in new WithApplication {
+
       val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
-      println(insertedBox)
       insertedBox.title must equalTo(boxTitle)
       insertedBox.dronekitMission must be equalTo Some(dronekitMissionId)
+
+    }
+
+    "return all boxes" in new WithApplication {
+      //insert one box
+      val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
+      //get all, check if the last one is the same
+      val boxes: Seq[Box] = Await.result(bbRepo.listBoxes(), Duration.Inf)
+      boxes.last should equalTo(insertedBox)
+
+    }
+
+    "find a box by ID" in new WithApplication {
+      //insert one box
+      val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
+      //get the same box by id
+      val box: Box = Await.result(bbRepo.findBoxById(insertedBox.id.get), Duration.Inf).get
+      box should equalTo(insertedBox)
+
     }
 
   }
