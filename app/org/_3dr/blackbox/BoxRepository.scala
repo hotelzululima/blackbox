@@ -84,4 +84,24 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
 
   }
 
+  /**
+    * List all Boxes.
+    *
+    * This function returns a list of all existing boxes
+    *
+    */
+  def listBoxes(): Future[Seq[Box]]= db.run {
+    boxes.result
+  }
+
+  /**
+    * Find Box by ID.
+    *
+    * This function returns a box by its id
+    * @param boxId ID for the Box
+    */
+  def findBoxById(boxId: UUID): Future[Option[Box]] = db.run {
+    boxes.filter(_.id === boxId).result.headOption
+  }
+
 }
