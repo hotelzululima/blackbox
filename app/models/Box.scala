@@ -1,7 +1,7 @@
 package models
 
 import java.sql.Timestamp
-import java.text.SimpleDateFormat
+import java.text.{DateFormat, SimpleDateFormat}
 import java.util.{Date, UUID}
 import play.api.libs.json._
 import slick.driver.JdbcProfile
@@ -20,9 +20,9 @@ import slick.driver.JdbcProfile
   * @param created date when the box was created.
   * @param dronekitMission Unique id for the DroneKit-Cloud Mission object this Box belongs to.
   */
-case class Box(id: Option[UUID] = Some(java.util.UUID.randomUUID()),
+case class Box(id: UUID = java.util.UUID.randomUUID(),
                title: String,
-               created: Option[Timestamp] = Some(new Timestamp(new Date().getTime)),
+               created: Timestamp = (new Timestamp(new Date().getTime)),
                dronekitMission: Option[UUID] = None)
 
 object Box {
@@ -31,16 +31,45 @@ object Box {
 
     val bbDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS")
 
+    def bbStringToTimestamp(date: String): Timestamp = {
+      new Timestamp(bbDateFormat.parse(date).getTime())
+    }
+
     def reads(json: JsValue) = JsSuccess(Box(
-      title = (json \ "title").as[String]
+      id = (json \ "id").as[UUID],
+      title = (json \ "title").as[String],
+      created = bbStringToTimestamp((json \ "created").as[String]),
+      dronekitMission = Option((json \ "dronekitMission").as[UUID])
     ))
 
     def writes(box: Box): JsValue = JsObject(Seq(
-      "id" -> JsString(box.id match { case Some(id) => id.toString }),
+      "id" -> JsString(box.id.toString),
       "title" -> JsString(box.title),
-      "created" -> JsString(bbDateFormat.format(box.created match { case Some(created) => created } )),
-      "dronekitMission" -> JsString(box.dronekitMission match { case Some(id) => id.toString })
+      "created" -> JsString(bbDateFormat.format(box.created)),
+      "dronekitMission" -> JsString(box.dronekitMission.getOrElse("").toString())
     ))
   }
+}
 
+/**
+  * Validates a NewBox
+  *
+  * A Box is the main container for a support ticket and all its logs (Stories).
+  *
+  * @param title Title for the box.
+  */
+case class NewBox(title: String)
+
+object NewBox {
+
+  implicit object newBoxFormat extends Format[NewBox] {
+
+    def reads(json: JsValue) = JsSuccess(NewBox(
+      title = (json \ "title").as[String]
+    ))
+
+    def writes(box: NewBox): JsValue = JsObject(Seq(
+      "title" -> JsString(box.title)
+    ))
+  }
 }

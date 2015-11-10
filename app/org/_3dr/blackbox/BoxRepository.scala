@@ -40,7 +40,7 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
     def dronekitMission = column[UUID]("dronekitMission")
 
     //mapping columns to the Box object
-    def * = (id.?, title, created.?, dronekitMission.?) <> ((Box.apply _).tupled, Box.unapply)
+    def * = (id, title, created, dronekitMission.?) <> ((Box.apply _).tupled, Box.unapply)
   }
 
   //this is our table accessor. We will run our queries on it.
@@ -80,8 +80,12 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
   def createBox(title: String, dronekitMission: Option[UUID]): Future[Box] = db.run {
 
     lazy val boxesInsert = boxes returning boxes.map(_.id) into ((box, id) => box.copy())
-    boxesInsert += Box(title= title, dronekitMission= dronekitMission)
+    boxesInsert += Box(title = title, dronekitMission = dronekitMission)
 
+  }
+
+  def listBoxes: Future[Seq[Box]] = db.run {
+    boxes.result
   }
 
 }
