@@ -5,9 +5,11 @@ import play.api.test.WithApplication
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.mvc._
-import play.api.libs.json.Json
+import play.api.libs.json._
 import play.api.Application
 import scala.concurrent._
+
+import models._
 
 import org.specs2._
 
@@ -42,9 +44,21 @@ class BoxesControllerSpec extends PlaySpecification {
             |  }
        """.stripMargin)
 
-      val request = fakeRequest("POST", "/").withJsonBody(jsonBody)
+      val request = fakeRequest("POST", "/boxes").withJsonBody(jsonBody)
       val response = call(boxesController.createBoxes, request)
-      status(response) must equalTo(CREATED) //yessssss
+      status(response) must equalTo(CREATED)
+    }
+
+    "get a list of boxes" in new WithApplication {
+      val request = fakeRequest("GET", "/boxes")
+      val response = call(boxesController.listBoxes, request)
+
+      status(response) must equalTo(OK)
+      contentType(response) must beSome("application/json")
+
+      val boxesList = Json.parse(contentAsString(response)).as[List[Box]]
+
+      boxesList.length must beGreaterThan(1)
 
     }
   }
