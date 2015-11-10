@@ -42,7 +42,7 @@ class BoxesControllerSpec extends PlaySpecification {
             |  }
        """.stripMargin)
 
-      val request = FakeRequest(POST, "/").withJsonBody(jsonBody)
+      val request = fakeRequest("POST", "/").withJsonBody(jsonBody)
       val response = call(boxesController.createBoxes, request)
       status(response) must equalTo(CREATED) //yessssss
 
