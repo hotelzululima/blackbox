@@ -20,12 +20,32 @@ import slick.driver.JdbcProfile
   * @param created date when the box was created.
   * @param dronekitMission Unique id for the DroneKit-Cloud Mission object this Box belongs to.
   */
-case class Box(id: UUID = java.util.UUID.randomUUID(),
+case class Box(id: Option[UUID] = Some(java.util.UUID.randomUUID()),
                title: String,
-               created: Timestamp = (new Timestamp(new Date().getTime())),
-               dronekitMission: Option[UUID])
+               created: Option[Timestamp] = Some(new Timestamp(new Date().getTime)),
+               dronekitMission: Option[UUID] = None)
 
 object Box {
+
+  implicit object boxFormat extends Format[Box] {
+
+    val bbDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS")
+
+    def reads(json: JsValue) = JsSuccess(Box(
+      title = (json \ "title").as[String]
+    ))
+
+    def writes(box: Box): JsValue = JsObject(Seq(
+      "id" -> JsString(box.id match { case Some(id) => id.toString }),
+      "title" -> JsString(box.title),
+      "created" -> JsString(bbDateFormat.format(box.created match { case Some(created) => created } )),
+      "dronekitMission" -> JsString(box.dronekitMission match { case Some(id) => id.toString })
+    ))
+  }
+
+
+
+  /*
   implicit val boxFormat = Json.format[Box]
 
   implicit object timestampFormat extends Format[Timestamp] {
@@ -36,4 +56,6 @@ object Box {
     }
     def writes(ts: Timestamp) = JsString(format.format(ts))
   }
+  */
+
 }

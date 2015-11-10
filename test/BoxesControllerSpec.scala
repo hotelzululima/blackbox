@@ -40,7 +40,7 @@ class BoxesControllerSpec extends PlaySpecification {
 
   "BoxesController" should {
     "accept a valid json box object" in new WithApplication {
-      val request = fakeRequest("POST", "/boxes").withJsonBody(Json.parse(
+      val request = FakeRequest().withJsonBody(Json.parse(
       s"""  {
          |    "title": "Fake Box"
          |  }
@@ -49,7 +49,7 @@ class BoxesControllerSpec extends PlaySpecification {
       println(request)
       val response = boxesController.createBoxes(request)
       println(response)
-      // status(response) mustEqual CREATED
+      status(response.) must equalTo(CREATED)
       // val jsonResponse = contentAsJson(response)
       // ObjectId.isValid((jsonResponse \ "id").as[String]) mustBe true
     }

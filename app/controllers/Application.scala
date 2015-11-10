@@ -17,7 +17,6 @@ class Application @Inject() (db: BoxRepository)
   insertBox onComplete{
     case Success(boxInstance) => println(boxInstance)
     case Failure(t) => println("An error occured" + t.getMessage)
-
   }
   */
   def index = Action {

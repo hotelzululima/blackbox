@@ -1,5 +1,6 @@
 package controllers
 
+import java.util.UUID
 import javax.inject._
 
 import org._3dr.blackbox._
@@ -9,7 +10,7 @@ import models._
 import play.api.libs.json.{JsError, Json}
 
 import scala.concurrent.ExecutionContext
-import scala.util.{Failure, Success}
+import scala.concurrent.Future
 
 /**
   * Created by rroche on 11/6/15.
@@ -17,11 +18,16 @@ import scala.util.{Failure, Success}
 class BoxesController @Inject() (db: BoxRepository)
                                 (implicit ec: ExecutionContext) extends Controller {
 
-  def createBoxes = Action(parse.json) { request =>
-    request.body.validate[Box].map{
-      case box => Created(Json.toJson(box))
-    }.recoverTotal {
-      e => BadRequest("Validation Error:"+ JsError.toJson(e))
-    }
+  def createBoxes = Action.async(BodyParsers.parse.json) { implicit request =>
+
+    val box = request.body.validate[Box]
+    box.fold(
+      errors => {
+        Future(BadRequest("Validation Error:"+ JsError.toJson(errors)))
+      },
+      box => {
+        db.createBox(box.title, Some(UUID.randomUUID())).map(box => Created(Json.toJson(box)))
+      }
+    )
   }
 }
