@@ -1,25 +1,20 @@
 package test
 
-import javax.inject.Inject
-
-import org._3dr.blackbox._
-
-import org.specs2.mutable._
-import org.specs2.runner._
-import org.junit.runner._
-
-import scala.concurrent.ExecutionContext
-
-import play.api.test._
+import play.api.test.PlaySpecification
+import play.api.test.WithApplication
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.api.mvc._
 import play.api.libs.json.Json
 import play.api.Application
+import scala.concurrent._
+
+import org.specs2._
 
 /**
   * Created by rroche on 11/6/15.
   */
 
-@RunWith(classOf[JUnitRunner])
 class BoxesControllerSpec extends PlaySpecification {
 
   def fakeRequest(method: String = "GET", route: String = "/") = FakeRequest(method, route)
@@ -34,24 +29,23 @@ class BoxesControllerSpec extends PlaySpecification {
   }
 
   def boxesController(implicit app: Application) = {
-    val app2ApplicationController = Application.instanceCache[controllers.BoxesController]
-    app2ApplicationController(app)
+    val app2BoxesController = Application.instanceCache[controllers.BoxesController]
+    app2BoxesController(app)
   }
 
   "BoxesController" should {
     "accept a valid json box object" in new WithApplication {
-      val request = FakeRequest().withJsonBody(Json.parse(
-      s"""  {
-         |    "title": "Fake Box"
-         |  }
-       """.stripMargin))
-      println("fuck yeah tests!")
-      println(request)
-      val response = boxesController.createBoxes(request)
-      println(response)
-      status(response.) must equalTo(CREATED)
-      // val jsonResponse = contentAsJson(response)
-      // ObjectId.isValid((jsonResponse \ "id").as[String]) mustBe true
+
+      val jsonBody = Json.parse(
+        s"""  {
+            |    "title": "Fake Box"
+            |  }
+       """.stripMargin)
+
+      val request = FakeRequest(POST, "/").withJsonBody(jsonBody)
+      val response = call(boxesController.createBoxes, request)
+      status(response) must equalTo(CREATED) //yessssss
+
     }
   }
 }
