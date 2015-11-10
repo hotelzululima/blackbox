@@ -1,4 +1,3 @@
-
 package test
 
 import java.util.UUID
@@ -29,7 +28,7 @@ class ModelSpec extends Specification {
 
   // --
 
-  "Computer model" should {
+  "Box model" should {
 
     def bbRepo(implicit app: Application) = {
       val app2BoxRepository = Application.instanceCache[BoxRepository]

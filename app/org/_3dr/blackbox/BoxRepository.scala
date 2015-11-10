@@ -1,7 +1,7 @@
 package org._3dr.blackbox
 
 import java.sql.Timestamp
-import java.util.UUID
+import java.util.{Date, UUID}
 import javax.inject.{ Inject, Singleton }
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
@@ -40,8 +40,7 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
     def dronekitMission = column[UUID]("dronekitMission")
 
     //mapping columns to the Box object
-    def * = (id, title, created.?, dronekitMission.?) <> (Box.tupled, Box.unapply)
-
+    def * = (id.?, title, created.?, dronekitMission.?) <> ((Box.apply _).tupled, Box.unapply)
   }
 
   //this is our table accessor. We will run our queries on it.
