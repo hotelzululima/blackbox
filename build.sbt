@@ -2,7 +2,9 @@ name := "blackbox"
 
 version := "1.0"
 
-lazy val `blackbox` = (project in file(".")).enablePlugins(PlayScala)
+lazy val `blackbox` = (project in file(".")).
+  enablePlugins(PlayScala).
+  settings(javaOptions in Test += "-Dconfig.file=conf/application-test.conf")
 
 scalaVersion := "2.11.7"
 
