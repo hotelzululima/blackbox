@@ -3,6 +3,10 @@ machine:
     version: oraclejdk8
   services:
     - postgresql
+database:
+  override:
+    - createuser -s -d blackbox
+    - createdb blackbox-api
 dependencies:
   pre:
     - curl -O https://downloads.typesafe.com/typesafe-activator/1.3.6/typesafe-activator-1.3.6-minimal.zip
