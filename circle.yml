@@ -1,0 +1,7 @@
+machine:
+  java:
+    version: oraclejdk8
+  scala:
+    version: 0.13.9
+  services:
+    - postgresql
