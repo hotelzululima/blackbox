@@ -58,7 +58,7 @@ class BoxesControllerSpec extends PlaySpecification {
 
       val boxesList = Json.parse(contentAsString(response)).as[List[Box]]
 
-      boxesList.length must beGreaterThan(1)
+      boxesList.length must beGreaterThanOrEqualTo(1)
 
     }
   }
