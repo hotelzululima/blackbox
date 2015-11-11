@@ -3,3 +3,12 @@ machine:
     version: oraclejdk8
   services:
     - postgresql
+dependencies:
+  pre:
+    - wget https://downloads.typesafe.com/typesafe-activator/1.3.6/typesafe-activator-1.3.6-minimal.zip
+    - unzip typesafe-activator-1.3.6-minimal.zip
+    - export PATH=$PATH:~/activator-1.3.6-minimal
+test:
+  override:
+    - activator update
+    - activator test
