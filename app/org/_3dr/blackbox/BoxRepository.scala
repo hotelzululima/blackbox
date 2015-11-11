@@ -40,7 +40,7 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
     def dronekitMission = column[UUID]("dronekitMission")
 
     //mapping columns to the Box object
-    def * = (id.?, title, created.?, dronekitMission.?) <> ((Box.apply _).tupled, Box.unapply)
+    def * = (id, title, created, dronekitMission.?) <> ((Box.apply _).tupled, Box.unapply)
   }
 
   //this is our table accessor. We will run our queries on it.
@@ -60,7 +60,7 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
     def * = (id, title, created.?, dronekitMedia.?) <> (Story.tupled, Story.unapply)
 
     //setup the foreign key. Delete stories when their box is deleted.
-    def box = foreignKey("box_fk", boxId, boxes)(_.id, onDelete=ForeignKeyAction.Cascade)
+    def box = foreignKey("box_fk", boxId, boxes)(_.id, onDelete = ForeignKeyAction.Cascade)
   }
 
   val stories = TableQuery[StoriesTable]
@@ -80,7 +80,7 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
   def createBox(title: String, dronekitMission: Option[UUID]): Future[Box] = db.run {
 
     lazy val boxesInsert = boxes returning boxes.map(_.id) into ((box, id) => box.copy())
-    boxesInsert += Box(title= title, dronekitMission= dronekitMission)
+    boxesInsert += Box(title = title, dronekitMission = dronekitMission)
 
   }
 
@@ -90,7 +90,7 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
     * This function returns a list of all existing boxes
     *
     */
-  def listBoxes(): Future[Seq[Box]]= db.run {
+  def listBoxes: Future[Seq[Box]] = db.run {
     boxes.result
   }
 
@@ -103,5 +103,4 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
   def findBoxById(boxId: UUID): Future[Option[Box]] = db.run {
     boxes.filter(_.id === boxId).result.headOption
   }
-
 }

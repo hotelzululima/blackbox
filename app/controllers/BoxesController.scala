@@ -20,7 +20,7 @@ class BoxesController @Inject() (db: BoxRepository)
 
   def createBoxes = Action.async(BodyParsers.parse.json) { implicit request =>
 
-    val box = request.body.validate[Box]
+    val box = request.body.validate[NewBox]
     box.fold(
       errors => {
         Future(BadRequest("Validation Error:"+ JsError.toJson(errors)))
@@ -29,5 +29,9 @@ class BoxesController @Inject() (db: BoxRepository)
         db.createBox(box.title, Some(UUID.randomUUID())).map(box => Created(Json.toJson(box)))
       }
     )
+  }
+
+  def listBoxes = Action.async { implicit request =>
+   db.listBoxes.map(boxes => Ok(Json.toJson(boxes)))
   }
 }
