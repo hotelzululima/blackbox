@@ -60,7 +60,7 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
     def * = (id, title, created.?, dronekitMedia.?) <> (Story.tupled, Story.unapply)
 
     //setup the foreign key. Delete stories when their box is deleted.
-    def box = foreignKey("box_fk", boxId, boxes)(_.id, onDelete=ForeignKeyAction.Cascade)
+    def box = foreignKey("box_fk", boxId, boxes)(_.id, onDelete = ForeignKeyAction.Cascade)
   }
 
   val stories = TableQuery[StoriesTable]

@@ -50,7 +50,7 @@ class ModelSpec extends Specification {
       //insert one box
       val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
       //get all, check if the last one is the same
-      val boxes: Seq[Box] = Await.result(bbRepo.listBoxes(), Duration.Inf)
+      val boxes: Seq[Box] = Await.result(bbRepo.listBoxes, Duration.Inf)
       boxes.last should equalTo(insertedBox)
 
     }
@@ -59,7 +59,7 @@ class ModelSpec extends Specification {
       //insert one box
       val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
       //get the same box by id
-      val box: Box = Await.result(bbRepo.findBoxById(insertedBox.id.get), Duration.Inf).get
+      val box: Box = Await.result(bbRepo.findBoxById(insertedBox.id), Duration.Inf).get
       box should equalTo(insertedBox)
 
     }
