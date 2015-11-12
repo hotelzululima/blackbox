@@ -7,7 +7,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
 import scala.concurrent.{ Future, ExecutionContext }
 
-import models.{Box, Story}
+import models.{Vehicle, Box, Story}
 
 /**
   * A repository for Boxes and their Stories.
@@ -66,6 +66,21 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
   val stories = TableQuery[StoriesTable]
 
   /**
+    * Vehicles Table
+    */
+
+  class VehiclesTable(tag: Tag) extends Table[Vehicle](tag, "Vehicles") {
+    def id = column[UUID]("id", O.PrimaryKey)
+    def mac = column[String]("mac")
+    def created = column[Timestamp]("created")
+    def dronekitVehicle = column[UUID]("dronekitVehicle")
+
+    def * = (id, mac.?, created, dronekitVehicle.?) <> ((Vehicle.apply _).tupled, Vehicle.unapply)
+  }
+
+  val vehicles = TableQuery[VehiclesTable]
+
+  /**
     * Creators and modifiers
     */
 
@@ -81,7 +96,6 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
 
     lazy val boxesInsert = boxes returning boxes.map(_.id) into ((box, id) => box.copy())
     boxesInsert += Box(title = title, dronekitMission = dronekitMission)
-
   }
 
   /**
@@ -102,5 +116,31 @@ class BoxRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(implici
     */
   def findBoxById(boxId: UUID): Future[Option[Box]] = db.run {
     boxes.filter(_.id === boxId).result.headOption
+  }
+
+  def createVehicle(mac: Option[String], dronekitVehicle: Option[UUID]): Future[Vehicle] = db.run {
+
+    lazy val vehiclesInsert = vehicles returning vehicles.map(_.id) into ((vehicle, id) => vehicle.copy())
+    vehiclesInsert += Vehicle(mac = mac, dronekitVehicle = dronekitVehicle)
+  }
+
+  /**
+    * List all Vehicles.
+    *
+    * This function returns a list of all existing vehicles
+    *
+    */
+  def listVehicles: Future[Seq[Vehicle]] = db.run {
+    vehicles.result
+  }
+
+  /**
+    * Find vehicle by ID.
+    *
+    * This function returns a vehicle by its id
+    * @param vehicleId ID for the Vehicle
+    */
+  def findVehicleById(vehicleId: UUID): Future[Option[Vehicle]] = db.run {
+    vehicles.filter(_.id === vehicleId).result.headOption
   }
 }
