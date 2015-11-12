@@ -3,6 +3,7 @@ package models
 import java.sql.Timestamp
 import java.text.{DateFormat, SimpleDateFormat}
 import java.util.{Date, UUID}
+import models.utils.ModelUtil
 import play.api.libs.json._
 import slick.driver.JdbcProfile
 
@@ -27,13 +28,7 @@ case class Box(id: UUID = java.util.UUID.randomUUID(),
 
 object Box {
 
-  implicit object boxFormat extends Format[Box] {
-
-    val bbDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SS")
-
-    def bbStringToTimestamp(date: String): Timestamp = {
-      new Timestamp(bbDateFormat.parse(date).getTime())
-    }
+  implicit object boxFormat extends Format[Box] with ModelUtil {
 
     def reads(json: JsValue) = JsSuccess(Box(
       id = (json \ "id").as[UUID],
