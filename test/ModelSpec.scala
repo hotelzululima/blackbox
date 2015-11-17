@@ -1,34 +1,19 @@
 package test
 
 import java.util.UUID
-
-import org.junit.runner.RunWith
-import org.specs2.runner.JUnitRunner
 import play.api.Application
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-import org.specs2.mutable.Specification
-
 import org._3dr.blackbox._
-import play.api.test.WithApplication
+import models._
+import org.scalatestplus.play._
 
-/**
-  * Created by genarorg on 11/9/15.
-  */
-@RunWith(classOf[JUnitRunner])
-class ModelSpec extends Specification {
 
-  import models._
+class ModelSpec extends PlaySpec with OneAppPerSuite with DBReset{
 
-  // -- Date helpers
-
-  def dateIs(date: java.util.Date, str: String) = new java.text.SimpleDateFormat("yyyy-MM-dd").format(date) == str
-
-  // --
-
-  "Box Repository" should {
+  "Box Repository" must {
 
     def bbRepo(implicit app: Application) = {
       val app2BoxRepository = Application.instanceCache[BoxRepository]
@@ -38,33 +23,31 @@ class ModelSpec extends Specification {
     val dronekitMissionId: UUID = UUID.fromString("4e536d2c-2cbb-4475-a07e-ce7776893f03")
     val boxTitle = "A test box from spec"
 
-    "create a new box and retrieve it" in new WithApplication {
+    "create a new box and retrieve it" in {
 
       val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
-      insertedBox.title must equalTo(boxTitle)
-      insertedBox.dronekitMission must be equalTo Some(dronekitMissionId)
+      insertedBox.title must equal(boxTitle)
+      insertedBox.dronekitMission must equal(Some(dronekitMissionId))
 
     }
 
-    "return all boxes" in new WithApplication {
+    "return all boxes" in {
       //insert one box
       val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
       //get all, check if the last one is the same
       val boxes: Seq[Box] = Await.result(bbRepo.listBoxes, Duration.Inf)
-      boxes.last should equalTo(insertedBox)
+      boxes.last must equal(insertedBox)
 
     }
 
-    "find a box by ID" in new WithApplication {
+    "find a box by ID" in {
       //insert one box
       val insertedBox: Box = Await.result(bbRepo.createBox(boxTitle, Some(dronekitMissionId)), Duration.Inf)
       //get the same box by id
       val box: Box = Await.result(bbRepo.findBoxById(insertedBox.id), Duration.Inf).get
-      box should equalTo(insertedBox)
+      box must equal(insertedBox)
 
     }
-
   }
-
 }
 

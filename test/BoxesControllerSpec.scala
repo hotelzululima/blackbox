@@ -1,23 +1,25 @@
 package test
 
-import play.api.test.PlaySpecification
-import play.api.test.WithApplication
+import play.api.mvc.Result
+import org.scalatestplus.play._
+
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import play.api.mvc._
 import play.api.libs.json._
 import play.api.Application
-import scala.concurrent._
+import play.api.test.Helpers._
 
 import models._
 
-import org.specs2._
+import scala.concurrent.Future
+import akka.actor.ActorSystem
+import akka.stream.{ActorMaterializer, Materializer}
 
-/**
-  * Created by rroche on 11/6/15.
-  */
 
-class BoxesControllerSpec extends PlaySpecification {
+class BoxesControllerSpec extends PlaySpec with OneAppPerSuite with DBReset{
+
+  //these are needed to execute 'call' on EssentialAction objects
+  implicit val system = ActorSystem("Sys")
+  implicit val mat: Materializer = ActorMaterializer()
 
   def fakeRequest(method: String = "GET", route: String = "/") = FakeRequest(method, route)
     .withHeaders(
@@ -25,18 +27,18 @@ class BoxesControllerSpec extends PlaySpecification {
       ("Authorization", "token=fd7ad598-84cb-11e5-a2d8-a7329ba812a2") // this be fake
     )
 
-  def applicationController(implicit app: Application) = {
+  def applicationController() = {
     val app2ApplicationController = Application.instanceCache[controllers.Application]
     app2ApplicationController(app)
   }
 
-  def boxesController(implicit app: Application) = {
+  def boxesController() = {
     val app2BoxesController = Application.instanceCache[controllers.BoxesController]
     app2BoxesController(app)
   }
 
   "BoxesController" should {
-    "accept a valid json box object" in new WithApplication {
+    "accept a valid json box object" in {
 
       val jsonBody = Json.parse(
         s"""  {
@@ -45,20 +47,21 @@ class BoxesControllerSpec extends PlaySpecification {
        """.stripMargin)
 
       val request = fakeRequest("POST", "/boxes").withJsonBody(jsonBody)
-      val response = call(boxesController.createBoxes, request)
-      status(response) must equalTo(CREATED)
+      val response: Future[Result] = call(boxesController.createBoxes, request)
+      status(response) must equal(CREATED)
     }
 
-    "get a list of boxes" in new WithApplication {
-      val request = fakeRequest("GET", "/boxes")
-      val response = call(boxesController.listBoxes, request)
+    "get a list of boxes" in {
 
-      status(response) must equalTo(OK)
-      contentType(response) must beSome("application/json")
+      val request = fakeRequest("GET", "/boxes")
+      val response: Future[Result] = call(boxesController.listBoxes, request)
+
+      status(response) must equal(OK)
+      contentType(response).get must equal("application/json")
 
       val boxesList = Json.parse(contentAsString(response)).as[List[Box]]
 
-      boxesList.length must beGreaterThan(1)
+      boxesList.length >= 1
 
     }
   }
