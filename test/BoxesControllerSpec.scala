@@ -15,7 +15,7 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 
 
-class BoxesControllerSpec extends PlaySpec with OneAppPerSuite with DBReset{
+class BoxesControllerSpec extends DBReset{
 
   //these are needed to execute 'call' on EssentialAction objects
   implicit val system = ActorSystem("Sys")

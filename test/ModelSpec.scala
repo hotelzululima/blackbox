@@ -11,7 +11,7 @@ import models._
 import org.scalatestplus.play._
 
 
-class ModelSpec extends PlaySpec with OneAppPerSuite with DBReset{
+class ModelSpec extends DBReset{
 
   "Box Repository" must {
 
