@@ -1,13 +1,14 @@
-package org._3dr.blackbox
+package org._3dr.blackbox.dal
 
 import java.sql.Timestamp
-import java.util.{Date, UUID}
-import javax.inject.{ Inject, Singleton }
-import play.api.db.slick.DatabaseConfigProvider
-import slick.driver.JdbcProfile
-import scala.concurrent.{ Future, ExecutionContext }
+import java.util.UUID
+import javax.inject.{Inject, Singleton}
 
 import models.{Box, Story}
+import play.api.db.slick.DatabaseConfigProvider
+import slick.driver.JdbcProfile
+
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * A repository for Boxes and their Stories.

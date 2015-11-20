@@ -4,6 +4,7 @@ import java.util.UUID
 import javax.inject._
 
 import org._3dr.blackbox._
+import org._3dr.blackbox.dal.BoxRepository
 import play.api.mvc._
 
 import models._

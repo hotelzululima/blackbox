@@ -13,7 +13,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "2.0.0-M1",
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0-M1",
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
-  "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
+  "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
+  "com.pauldijou" %% "jwt-play" % "0.4.1"
 
 )
 

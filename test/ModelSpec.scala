@@ -1,6 +1,7 @@
 package test
 
 import java.util.UUID
+import org._3dr.blackbox.dal.{UserRepository, BoxRepository}
 import play.api.Application
 
 import scala.concurrent.Await
@@ -48,6 +49,31 @@ class ModelSpec extends DBReset{
       box must equal(insertedBox)
 
     }
+  }
+
+  "User Repository" must {
+
+    def bbUserRepo(implicit app: Application) = {
+      val app2UserRepository = Application.instanceCache[UserRepository]
+      app2UserRepository(app)
+    }
+
+    "create a new user" in {
+      //insert one new user
+      val insertedUser: User = Await.result(bbUserRepo.createUser("test@test.com", 1), Duration.Inf)
+      //get all, check if the last one is the same
+      val users: Seq[User] = Await.result(bbUserRepo.listUsers, Duration.Inf)
+      users.last must equal(insertedUser)
+    }
+
+    "find a user by ID" in {
+      //insert one new user
+      val insertedUser: User = Await.result(bbUserRepo.createUser("test2@test.com", 1), Duration.Inf)
+      //get the same user by email
+      val user: User = Await.result(bbUserRepo.findUserByEmail(insertedUser.email), Duration.Inf).get
+      user must equal(insertedUser)
+    }
+
   }
 }
 
