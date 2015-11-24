@@ -59,7 +59,7 @@ class BoxesControllerSpec extends DBReset{
       status(response) must equal(OK)
       contentType(response).get must equal("application/json")
 
-      val boxesList = Json.parse(contentAsString(response)).as[List[Box]]
+      val boxesList = (Json.parse(contentAsString(response)) \ "boxes").as[List[Box]]
 
       boxesList.length >= 1
 
