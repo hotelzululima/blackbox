@@ -14,11 +14,11 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick-evolutions" % "2.0.0-M1",
   "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
   "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test",
-  "com.pauldijou" %% "jwt-play" % "0.4.1"
-
+  "com.jason-goodwin" %% "authentikat-jwt" % "0.4.1"
 )
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
+resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo)
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
 
