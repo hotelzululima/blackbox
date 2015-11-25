@@ -17,6 +17,11 @@ import authentikat.jwt._
 
 /**
   * Created by genarorg on 11/19/15.
+  *
+  * This contoller provides an action and methods to validate
+  * user credentials against a zendesk instance and issue a token if
+  * the credentials are succesfully validated and the user has the right
+  * zendesk role assigned.
   */
 class AuthController  @Inject() (implicit ec: ExecutionContext, implicit val ws:WSClient) extends Controller with ZendeskService with ValidationErrorFormat {
 

@@ -26,7 +26,7 @@ class AuthControllerSpec extends DBReset{
     app2AuthController(app)
   }
 
-  "AuthController" should {
+  "Zendesk Authorization Controller" should {
 
     "Accept and validate a json request" in {
 
